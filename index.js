@@ -27,12 +27,19 @@ initializeDBAndServer();
 
 // Get Books API
 app.get("/books/", async (request, response) => {
-  const getBooksQuery = `SELECT
+  const requestQueryObject = request.query;
+  //console.log(requestQueryObject);
+  const { offset, limit, search_q, order_by, order } = requestQueryObject;
+  const getBooksQuery = `
+    SELECT
       *
     FROM
-      book
-    ORDER BY
-      book_id;`;
+     book
+    WHERE
+     title LIKE '%${search_q}%'
+    ORDER BY ${order_by} ${order}
+    LIMIT ${limit} OFFSET ${offset};`;
+
   const booksArray = await db.all(getBooksQuery);
   response.send(booksArray);
 });
@@ -148,5 +155,3 @@ app.get("/authors/:authorId/books/", async (request, response) => {
   const booksArray = await db.all(getAuthorBooksQuery);
   response.send(booksArray);
 });
-
-
