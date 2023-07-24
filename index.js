@@ -29,7 +29,13 @@ initializeDBAndServer();
 app.get("/books/", async (request, response) => {
   const requestQueryObject = request.query;
   //console.log(requestQueryObject);
-  const { offset, limit, search_q = " ", order_by, order } = requestQueryObject;
+  const {
+    offset = 2,
+    limit = 5,
+    search_q = " ",
+    order_by = "book_id",
+    order = "ASC",
+  } = requestQueryObject;
 
   const getBooksQuery = `
     SELECT
