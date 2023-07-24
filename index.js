@@ -30,6 +30,9 @@ app.get("/books/", async (request, response) => {
   const requestQueryObject = request.query;
   //console.log(requestQueryObject);
   const { offset, limit, search_q, order_by, order } = requestQueryObject;
+  /*
+  when "search_q" is not passed in query parameter 
+  */
   const getBooksQuery = `
     SELECT
       *
@@ -39,9 +42,8 @@ app.get("/books/", async (request, response) => {
      title LIKE '%${search_q}%'
     ORDER BY ${order_by} ${order}
     LIMIT ${limit} OFFSET ${offset};`;
-
   const booksArray = await db.all(getBooksQuery);
-  response.send(booksArray);
+  response.send(booksArray); //output will be an empty array []
 });
 
 //Get Book API
